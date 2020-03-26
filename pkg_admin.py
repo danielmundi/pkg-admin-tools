@@ -18,11 +18,12 @@ if not os.geteuid() == 0:
 
 # Read config file
 configs = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
-configs.read('modules/modules.ini')
+configs.read(pkg_admin_path() + 'modules/modules.ini')
 config_choices = configs.sections()
+config_choices.remove('self')
 
 # read version file
-this_version = read_file(configs['pkg_admin']['install_dir'] + "/version.txt")
+this_version = read_file(configs['self']['install_dir'] + "/version.txt")
 
 # create parser args
 parse_descr = "Package install utility for the WLAN Pi. \n"
@@ -62,7 +63,7 @@ if (args.empty_bin):
 
 # update util
 if (args.update):
-    instal_module = 'pkg_admin'
+    instal_module = 'self'
 else:
     install_module = args.install
 
