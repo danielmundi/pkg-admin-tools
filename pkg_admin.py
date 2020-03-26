@@ -40,6 +40,7 @@ parser.add_argument("-d", dest='dev', action='store_true', help="install dev bra
 parser.add_argument("-b", dest='branch', type=str, metavar=('branch_name'), help="install branch specific branch/release (used with -i option)")
 parser.add_argument("-u", dest='update', action='store_true', help="update this utility with latest version")
 parser.add_argument("-e", dest='empty_bin', action='store_true', help="empty recycle bin folder")
+parser.add_argument("-c", dest='get_choices', action='store_true', help="get all possible choices to install/roll back")
 parser.add_argument("-v", action='version', version=this_version)
 
 args = parser.parse_args()
@@ -64,6 +65,10 @@ if (args.update):
     instal_module = 'pkg_admin'
 else:
     install_module = args.install
+
+if (args.get_choices):
+    for choice in config_choices:
+        print(choice)
 
 if (install_module is not None):
     params = dict(configs.items(install_module))
