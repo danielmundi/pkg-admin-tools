@@ -96,6 +96,16 @@ def move_directory(src, dst):
         print("Error: {}".format(ex))
         return False
 
+def create_directory(path):
+    try:
+        os.makedirs(path, exist_ok=True)
+        print("Directory {} created.".format(path))
+        return True
+    except Exception as ex:
+        print("Unable to create directory {}".format(path))
+        print("Error: {}".format(ex))
+        return False
+
 def clear_dir(dir):
     try:
         pull_output = subprocess.check_output(
@@ -146,7 +156,7 @@ def check_module_installed(mod_name):
 def pkg_install(branch, params, post_install):
 
     pkg_name = params['pkg_name']
-    linux_pkg_list = params['linux_pkg_list']
+    linux_pkg_list = params['linux_pkg_list'].split(',')
     backup_dir = params['backup_dir']
     base_dir = params['base_dir']
     module_dir = params['module_dir']
@@ -183,6 +193,10 @@ def pkg_install(branch, params, post_install):
             if not clear_dir(backup_dir):
                 return False
 
+    # create base_dir if it doesn't exist
+    if not file_exists(base_dir):
+        create_directory(base_dir)
+
     # change in to home dir
     print("Changing to home directory: {}".format(base_dir))
     if not change_directory(base_dir):
@@ -206,7 +220,7 @@ def pkg_install(branch, params, post_install):
     # clone files from GitHub
     if not pull_github_files(github_url, branch):
         return False
-        
+
     # Read release notes if vailable and print to screen
     rel_notes_file = '{}/release_notes.txt'.format(install_dir)
     if file_exists(rel_notes_file):
@@ -262,3 +276,10 @@ def pkg_rollback(params):
 
     print("Rollback complete.")
     return True
+
+
+def pkg_admin_path():
+    return os.path.realpath(__file__)
+
+def default_base_install_path():
+    return os.path.dirname(pkg_admin_path())
