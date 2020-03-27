@@ -279,7 +279,11 @@ def pkg_rollback(params):
 
 
 def pkg_admin_path():
-    return os.path.realpath(__file__)
+    path = os.path.dirname(os.path.realpath(__file__))
+    if os.path.basename(path) == 'modules':
+        return os.path.dirname(path)
+    else:
+        return path
 
 def default_base_install_path():
     return os.path.dirname(pkg_admin_path())

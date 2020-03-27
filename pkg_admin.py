@@ -18,7 +18,8 @@ if not os.geteuid() == 0:
 
 # Read config file
 configs = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
-configs.read(pkg_admin_path() + 'modules/modules.ini')
+config_path = pkg_admin_path() + '/modules/modules.ini'
+configs.read(config_path)
 config_choices = configs.sections()
 config_choices.remove('self')
 
